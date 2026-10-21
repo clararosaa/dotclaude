@@ -77,6 +77,10 @@ redacted in public and upstream repositories.
   Automated checks come first, the verify command and then end to end, and the manual pass comes
   last, unless the user says otherwise: a failing spec shows before the slow part, and end to end
   never follows the manual steps.
+- Steps given in chat, a review's list included, are a Markdown task list, so the reader can
+  mark where they are: every step, the command steps too, opens with `- [ ]` and its number, as
+  `- [ ] 3. Open this address:`, with its blocks and sub-items indented two spaces under it. A
+  PR body's How to verify, and the block a review writes for it, stay a numbered list.
 - The automated part is two command steps, each one fenced block joined with `&&`, since each
   is a sequence that should stop at its first failure. The first, run in a tab of its own,
   fetches, switches to the branch, updates the submodules and starts the stack. The second, in
