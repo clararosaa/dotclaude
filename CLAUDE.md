@@ -248,7 +248,8 @@ apply to one repository belong in that repository's project memory.
   person whose address no source gives is named as not checked, never looked up under a
   guessed address.
 - Steps written for a person outside a PR, in a README, a setup section or chat, are run here
-  before they are written down, and a menu, tab or button they name is taken from the installed
+  before they are written down, apart from test steps for a change under review, which the
+  `pull-requests` skill covers. A menu, tab or button they name is taken from the installed
   version, such as the app's localized strings or the tool's `--help`, never from memory. A step
   that cannot be run here, such as a sign-in, a device build or a setting on a phone, is named
   in the reply as not run, with the reason, and is never called checked.

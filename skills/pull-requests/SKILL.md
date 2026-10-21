@@ -67,6 +67,10 @@ redacted in public and upstream repositories.
 
 ## How to verify
 
+- A prompt that asks for the steps to verify a change, manual steps or all of them, gets the
+  steps alone, written from the PR body, the diff, the components and the seed files: nothing
+  switches the checkout, starts the stack, runs a check or walks a step, and the reply says the
+  steps were not run. Only a prompt that asks for a review runs them, as Reviewing a PR says.
 - Test steps for a change under review, in a PR body's "How to verify" or given in chat, end
   with the last check. No step switches the checkout back to the branch it was on before: the
   next review's checkout replaces the branch anyway, and where to go next is the reader's call.
@@ -92,7 +96,8 @@ redacted in public and upstream repositories.
   a screenshot or recording of that step shows other data: then the step has the reader type
   and pick exactly what the picture shows, so the screen matches the picture. A step
   that searches by name says what to type and uses the shortest string the seed data does not
-  contain, checked with a search in the grid first. Every action the reader takes is written
+  contain, checked in the seed files, or with a search in the grid when a review has the app
+  running. Every action the reader takes is written
   down, also the ones that feel obvious: copy the address before pasting it, open the new tab
   before pasting into it, log in again after logging out. A step never relies on something the
   reader has not been told to do. A step that opens a page gives its full local address, such
