@@ -1,0 +1,312 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "deny": [
+      "mcp__plugin_figma_figma__use_figma",
+      "mcp__plugin_figma_figma__generate_figma_design",
+      "mcp__plugin_figma_figma__generate_diagram",
+      "mcp__plugin_figma_figma__create_new_file",
+      "mcp__plugin_figma_figma__create_generative_plugin",
+      "mcp__plugin_figma_figma__update_generative_plugin",
+      "mcp__plugin_figma_figma__create_shader",
+      "mcp__plugin_figma_figma__update_shader",
+      "mcp__plugin_figma_figma__upload_assets",
+      "mcp__plugin_figma_figma__add_code_connect_map",
+      "mcp__plugin_figma_figma__send_code_connect_mappings",
+      "mcp__plugin_figma_figma__weave_run_tool",
+      "mcp__plugin_figma_figma__weave_upload_asset",
+      "mcp__plugin_figma_figma__weave_cancel_tool_run",
+      "mcp__plugin_figma_figma__weave_list_tools",
+      "mcp__plugin_figma_figma__weave_get_tool_inputs",
+      "mcp__plugin_figma_figma__weave_get_tool_run_output",
+      "mcp__figma__use_figma",
+      "mcp__figma__generate_figma_design",
+      "mcp__figma__generate_diagram",
+      "mcp__figma__create_new_file",
+      "mcp__figma__create_generative_plugin",
+      "mcp__figma__update_generative_plugin",
+      "mcp__figma__create_shader",
+      "mcp__figma__update_shader",
+      "mcp__figma__upload_assets",
+      "mcp__figma__add_code_connect_map",
+      "mcp__figma__send_code_connect_mappings",
+      "mcp__figma__weave_run_tool",
+      "mcp__figma__weave_upload_asset",
+      "mcp__figma__weave_cancel_tool_run",
+      "mcp__figma__weave_list_tools",
+      "mcp__figma__weave_get_tool_inputs",
+      "mcp__figma__weave_get_tool_run_output",
+      "Edit(~/.claude/projects/*-Claude-scratch-workspaces-*/memory/**)",
+      "mcp__claude-in-chrome"
+    ],
+    "allow": [
+      "Bash(gh repo create:*)",
+      "Bash(gh issue edit:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh pr reopen:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(~/.claude/hooks/prompt-log.sh print:*)",
+      "Bash(gh pr ready:*)",
+      "Bash(gh pr merge:*)"
+    ],
+    "ask": [
+      "Bash(brew install:*)",
+      "Bash(brew reinstall:*)",
+      "Bash(brew tap:*)",
+      "Bash(pipx install:*)",
+      "Bash(uv tool install:*)",
+      "Bash(npm install -g:*)",
+      "Bash(npm install --global:*)",
+      "Bash(npm i -g:*)",
+      "Bash(cargo install:*)",
+      "Bash(go install:*)",
+      "Bash(gem install:*)",
+      "Edit(**/.github/workflows/**)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "claude-opus-5-5",
+  "enabledPlugins": {
+    "figma@claude-plugins-official": false
+  },
+  "modelSettings": {
+    "claude-opus-5": {},
+    "claude-fable-5-1": {
+      "effortLevel": "xhigh"
+    }
+  },
+  "theme": "dark",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/git-fetch-prune.sh\"",
+            "async": true,
+            "timeout": 120
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/claude-md-changed.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/prompt-log.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/prompt-feedback-box.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/git-prune-gone-branches.sh\"",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/claude-md-changed.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/no-github-posts.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/claude-md-changed.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "^mcp__.*__(list_events|get_event)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/calendar-free-busy-only.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/check-not-piped.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/no-home-search.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/stack-held-by-peer.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/cd-fall-through.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/no-meta-prompts.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__ccd_turn__wrap_up",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/prompt-feedback-box.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/stop-running-stack.sh\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/usage-log.sh\"",
+            "timeout": 60,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/memory-plain-characters.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/git-submodule-update-after-switch.sh\"",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  },
+  "claudeMdExcludes": [
+    "**/dotclaude/CLAUDE.md"
+  ],
+  "skipWorkflowUsageWarning": true,
+  "workflowKeywordTriggerEnabled": false,
+  "cleanupPeriodDays": 90,
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: assume private unless the remote host and repo name indicate otherwise, or a visibility check in the transcript shows public — this scratch workspace has no remotes to check",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: unknown — no remotes configured in this repo (origin/HEAD unset, no tracked files)",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: The trusted repo and its remote(s) only (no additional orgs configured) — this repo currently has no remotes",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries prod or production as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries prod or production as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development",
+      "**Trusted repo**: The git repository the agent started in (this scratch workspace directory) — it currently has no configured remotes, so no additional trust extends beyond the local working tree",
+      "**Org-specific CLIs**: None configured"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/session-usage"
+  }
+}

@@ -1,0 +1,5 @@
+sync-mirrors.txt
+sync-deny.txt
+.DS_Store
+*.bak
+*.tmp
