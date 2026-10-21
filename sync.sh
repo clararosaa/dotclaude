@@ -119,6 +119,17 @@ ensure_msg_hook() {
   chmod +x "$hook"
 }
 
+# The files as they were when ~/.claude and the checkout last agreed.
+agreed="$repo/.git/sync-agreed"
+save_agreed() {
+  local f
+  rm -rf "$agreed"
+  while IFS= read -r f; do
+    mkdir -p "$(dirname "$agreed/$f")"
+    cp -p "$repo/$f" "$agreed/$f"
+  done < <(files_under "$repo")
+}
+
 reconcile() {
   local old f installs=() copies=() conflicts=() base
   old="$(git_c rev-parse -q --verify HEAD || true)"
@@ -126,7 +137,9 @@ reconcile() {
     git_c pull --ff-only --quiet || die "the pull did not fast-forward; sort out the checkout first"
   fi
   base="$(mktemp -d)"
-  if [ -n "$old" ]; then
+  if [ -d "$agreed" ]; then
+    cp -Rp "$agreed/." "$base/"
+  elif [ -n "$old" ]; then
     while IFS= read -r f; do
       mkdir -p "$base/$(dirname "$f")"
       git_c show "$old:$f" > "$base/$f"
@@ -174,6 +187,7 @@ reconcile() {
       echo "copied ~/.claude/$f"
     fi
   done
+  save_agreed
 }
 
 mirror_dirs=()
@@ -195,7 +209,8 @@ copy_into_mirrors() {
       [ -n "$f" ] && [ ! -e "$repo/$f" ] && [ -f "$dir/$f" ] || continue
       rm "$dir/$f"
       echo "removed $f from $line"
-    done < <({ git_c log --diff-filter=D --name-only --format= 2> /dev/null || true; git_c ls-files -d; } | sort -u)
+    done < <({ git_c log --diff-filter=D --name-only --format= 2> /dev/null || true
+               git_c diff --name-only --diff-filter=D HEAD 2> /dev/null || true; } | sort -u)
     echo "copied into $line"
     mirror_dirs+=("$dir")
   done < "$repo/sync-mirrors.txt"
@@ -250,10 +265,12 @@ case "${1:-}" in
       cp -p "$repo/$f" "$live/$f"
       echo "installed ~/.claude/$f"
     done < <(files_under "$repo")
+    save_agreed
     exit
     ;;
   --commit)
     [ -f "${2:-}" ] || die "usage: sync.sh --commit <message file> [path...]"
+    check_message "$2" || exit 1
     ;;
   '') ;;
   *) die "unknown option $1" ;;
