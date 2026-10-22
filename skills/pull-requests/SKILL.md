@@ -84,6 +84,10 @@ redacted in public and upstream repositories.
   the steps ticked. The chat cannot tick a Markdown task box. The reply links the page instead
   of repeating the steps, and says what changed when it republishes. A PR body's How to verify,
   and the block a review writes for it, stay a numbered list.
+- A checklist page gets pictures only when the user asks for them, since they need the stack:
+  then one per manual step, taken and checked as Screenshots and recordings says, published
+  with the page as its files, each under a one-line caption at the start of its step. The ask
+  is what lets a steps request start the stack.
 - The automated part is two command steps, each one fenced block joined with `&&`, since each
   is a sequence that should stop at its first failure. The first, run in a tab of its own,
   fetches, switches to the branch, updates the submodules and starts the stack. The second, in
