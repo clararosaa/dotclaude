@@ -50,7 +50,9 @@
       "Bash(git push --force-with-lease:*)",
       "Bash(~/.claude/hooks/prompt-log.sh print:*)",
       "Bash(gh pr ready:*)",
-      "Bash(gh pr merge:*)"
+      "Bash(gh pr merge:*)",
+      "Bash(claude mcp add:*)",
+      "Bash(npx -y @togglhq/mcp:*)"
     ],
     "ask": [
       "Bash(brew install:*)",
