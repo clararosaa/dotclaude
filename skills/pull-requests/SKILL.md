@@ -17,6 +17,12 @@ redacted in public and upstream repositories.
   else: no free-form summary or test plan outside that. The sentence and the closing line stand
   on their own, without a heading, even where the template gives them sections of their own.
   Without a template the body ends after the blocks and the user writes the description.
+- The closing line names the parent of a closed issue too when this PR closes the last of its
+  sub-issues still open, since GitHub leaves a parent open after its last sub-issue closes. The
+  issue's `parent` and that parent's `subIssues` with their states come from `gh api graphql`, and
+  the check runs again whenever the closing line is written or the body refreshed, as a sub-issue
+  may close elsewhere in the meantime. A parent whose body names work that none of its sub-issues
+  covers stays off the line, and the reply says why.
 - The two blocks come straight after the closing line and above the rest of the template. They
   are a TL;DR for the reviewer.
 - First block: a fenced code block holding the URL of the public configuration repository

@@ -455,6 +455,14 @@ apply to one repository belong in that repository's project memory.
   key order first, so `claude plugin` and the `/plugin` dialog may change `settings.json`. When
   a new file under `~/.claude` would help other people (a hook, a skill, a command, an agent),
   add it to the list in `sync.sh` first.
+- The reply that reports such a push also gives a prompt the user can hand to a teammate who runs a
+  copy of this setup, in a `text` block of its own, so the teammate fetches nothing. It carries the
+  change itself: each new or rewritten rule as it now reads, or a new or changed script whole, with
+  the file and the section or neighbouring rule it goes beside, since their copy may be older and
+  its lines differ. It tells the teammate's Claude Code to put each one in place in their own copy
+  under `~/.claude`, to keep their local changes, and then, if they keep a mirror of their own, to
+  commit and push it as their rules for that mirror say, and it says go, which their copy of these
+  rules waits for. It names no project, client or person, so it can be passed on as it is.
 - A rule in a mirrored file states what holds now. The incident behind it, its date and the
   wording it replaced go into the commit message, never into the file, and a changed rule is
   rewritten in place rather than followed by a note on what it used to say.
