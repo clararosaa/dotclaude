@@ -90,6 +90,10 @@ redacted in public and upstream repositories.
   the steps ticked. The chat cannot tick a Markdown task box. The reply links the page instead
   of repeating the steps, and says what changed when it republishes. A PR body's How to verify,
   and the block a review writes for it, stay a numbered list.
+- A prompt that asks to fix something, such as an issue, a bug or a review finding, gets that
+  page in the same turn as the fix, unasked: once the fix is committed, publish the checklist of
+  the steps that verify it, or republish the page its PR already has, and link it in the reply.
+  When the fix has a PR, the page carries the steps of its How to verify.
 - A checklist page gets pictures only when the user asks for them, since they need the stack:
   then one per manual step, taken and checked as Screenshots and recordings says, published
   with the page as its files, each under a one-line caption at the start of its step. The ask
