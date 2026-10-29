@@ -6,7 +6,9 @@
 # reason, so the stack is stopped and the reply says so. It stops nothing
 # itself, and a turn that started nothing passes.
 # A turn passes too when stack-held-by-peer.sh records the stack as another
-# session's.
+# session's, or when the session wrote its id into claude-stack-kept in the
+# git directory to keep the stack up for the user's checks. The hook
+# removes that file as it lets the turn pass, so it covers one turn.
 # The current turn is read from the transcript, whose format Claude Code does
 # not document, so a change there makes this hook quietly pass every turn.
 
@@ -19,6 +21,15 @@ input="$(cat 2>/dev/null)"
 [ "$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null)" = false ] || exit 0
 transcript="$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)"
 [ -f "$transcript" ] || exit 0
+session="$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)"
+
+repo="${CLAUDE_PROJECT_DIR:-$PWD}"
+common_dir="$(git -C "$repo" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+kept="$common_dir/claude-stack-kept"
+if [ -n "$session" ] && [ "$(cat "$kept" 2>/dev/null)" = "$session" ]; then
+  rm -f "$kept"
+  exit 0
+fi
 
 jq -Rrn '
   [inputs | fromjson? // empty] as $lines
@@ -34,8 +45,6 @@ jq -Rrn '
 ' "$transcript" 2>/dev/null |
   grep -Eq '[[:alnum:]_-]+ +start:local|docker(-| +)compose .*up( |$)' || exit 0
 
-repo="${CLAUDE_PROJECT_DIR:-$PWD}"
-common_dir="$(git -C "$repo" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
 case "$common_dir" in
   */.git) root="${common_dir%/.git}" ;;
   *) root="$(git -C "$repo" rev-parse --show-toplevel 2>/dev/null || echo "$repo")" ;;
@@ -46,7 +55,7 @@ projects="$(docker ps --format '{{.Label "com.docker.compose.project"}}\t{{.Labe
   sort -u | paste -sd ' ' -)"
 [ -n "$projects" ] || exit 0
 holder="$(cut -f1 "$common_dir/claude-stack-holder" 2>/dev/null)"
-[ -z "$holder" ] || [ "$holder" = "$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)" ] || exit 0
+[ -z "$holder" ] || [ "$holder" = "$session" ] || exit 0
 
 echo "This turn started a stack and compose project $projects is still up. Stop it with the project's own stop command and say in the reply that it is stopped." >&2
 exit 2

@@ -308,11 +308,19 @@ apply to one repository belong in that repository's project memory.
   stop the project's container stack with the project's own stop command before the reply,
   every turn, even when the next turn will start it again, and say in the reply that it is
   stopped. A project memory that says to keep a stack up does not override this.
+- The exception is a turn that hands the user steps to walk by hand now, such as the checklist
+  page a fix gets: it leaves the stack up on the branch under check, started clean after the
+  turn's last end to end run so it holds only seed data, and the reply says the stack is up,
+  which steps the turn already ran with their results, and the step to start at. The stack
+  stays up while the user walks the steps and comes back with findings. The first turn that
+  moves on to other work, or hears that the check is done, stops it as above.
 - A `Stop` hook runs `~/.claude/hooks/stop-running-stack.sh` when a turn ends. When that turn
   ran a command that starts a compose stack, and a compose project of the repository or one of
   its worktrees still has containers up, it sends the turn back once with the reason. It stops
-  nothing itself, and a turn that started nothing passes. It is a safety net for the rule
-  above, not a substitute for it.
+  nothing itself, and a turn that started nothing passes. So does a turn that kept the stack up
+  under the exception above and said so by writing `$CLAUDE_CODE_SESSION_ID` into
+  `claude-stack-kept` in the git common directory; the hook removes that file as the turn
+  ends. It is a safety net for the rules above, not a substitute for them.
 - The `usage` mod in `~/.claude/mods/session-usage`, which `CLAUDE_CODE_PLUGIN_DIRS` in
   `settings.json` loads in every session, pins a status line under the prompt: a fire emoji and
   the minutes the prompt cache stays warm, or an ice cube emoji and since when it is cold (the
