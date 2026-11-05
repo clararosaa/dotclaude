@@ -290,6 +290,15 @@ apply to one repository belong in that repository's project memory.
 - A `dotclaude` ask is how the user asks for a rule change, alone or inside a prompt about other
   work. The feedback never calls it unclear or a second job, and a rewritten prompt keeps it.
 
+## Scope of a change
+
+- Build what the issue, the design or the user asks for, and nothing beside it. A part no one
+  asked for, such as a separate list of the selected items beside a picker whose rows already
+  show their ticks, goes into the reply as a one-line proposal, never into the code. A review of
+  someone else's change flags such a part as a finding.
+- A proposal the user turns down is not built, not raised again and not folded into other work
+  later in the session. Only the user brings it back.
+
 ## Comments
 
 - Match the comment density of the file being edited and the files beside it. Look before writing
