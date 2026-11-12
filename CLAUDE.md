@@ -86,6 +86,16 @@ apply to one repository belong in that repository's project memory.
   from someone else) is never quoted, in a commit message or in a PR body. Replace it where it
   stood with a bracketed description of what it was, such as `[pasted: an email address]` or
   `[pasted: 40 lines of test output]`.
+- A quoted prompt or button label that holds a GitHub closing keyword (close, closes, closed, fix,
+  fixes, fixed, resolve, resolves, resolved) in front of an issue reference, which is a hash sign
+  and a number, owner/repo with one, or an issue's address, is written with the number in plain
+  words, as in `Close issue 12`. GitHub acts on the keyword anywhere in a PR body or a commit
+  message, inside a quote too. `prompt-log.sh print` makes the change in every prompt it prints,
+  button labels included, and prints an address as `[pasted: an address]` anyway, so by hand it
+  is left for what is added to the printout, such as an AskUserQuestion selection. After every
+  write of a PR body, `gh pr view <n> --json closingIssuesReferences` lists only the issues the
+  PR means to close, and the body is fixed when it lists another. A squash commit's message is
+  checked the same way before a merge.
 - Print the prompts, never retype them. The `UserPromptSubmit` hook `prompt-log.sh` in
   `~/.claude/hooks` appends every prompt to `~/.claude/prompt-log/<session id>.jsonl`, and
   `~/.claude/hooks/prompt-log.sh print` prints the session's prompts numbered and quoted for a

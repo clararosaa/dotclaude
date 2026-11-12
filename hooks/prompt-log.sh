@@ -18,7 +18,9 @@
 # hand-backs and notifications, and an entry with nothing else in it gets no
 # number. A pasted block comes out as [pasted: n lines], URLs and email
 # addresses as [pasted: an address], a home path with ~, a temporary path as
-# [a temporary path] and a password or token value as [redacted].
+# [a temporary path], a password or token value as [redacted], and an issue
+# reference after a GitHub closing keyword as Close issue 12, so that quoting
+# the prompt in a PR body or a commit message closes no issue.
 # A prompt identical to the one before it, such as one sent again after a hook
 # blocked it, is printed once.
 
@@ -58,6 +60,9 @@ if [ -z "$session" ] || [ ! -f "$log" ]; then
   exit 1
 fi
 
+closing_keyword='(close[sd]?|fix(es|ed)?|resolve[sd]?)'
+closing_gap=':[[:space:]]*|[[:space:]]+:?[[:space:]]*'
+
 n=0
 jq -j '.prompt
   | gsub("<(?<t>system-reminder|artifact-view-context|cross-session-message|agent-message|task-notification|teammate-message)[\\s>][\\s\\S]*?</\\k<t>\\s*>"; "")
@@ -77,7 +82,9 @@ jq -j '.prompt
     -e 's#(/private)?/tmp/claude-[0-9]+/[^[:space:]"]*#[a temporary path]#g' \
     -e 's#/Users/[^/[:space:]"]+#~#g' \
     -e 's#((mysql|mariadb|mysqldump|mysqladmin)[^|;&]*[[:space:]]-p)[^[:space:]]+#\1[redacted]#g' \
-    -e 's#((PASSWORD|PASSWD|TOKEN|SECRET|PWD|[Pp]assword|[Pp]asswd|[Tt]oken|[Ss]ecret)=)[^[:space:]]+#\1[redacted]#g')"
+    -e 's#((PASSWORD|PASSWD|TOKEN|SECRET|PWD|[Pp]assword|[Pp]asswd|[Tt]oken|[Ss]ecret)=)[^[:space:]]+#\1[redacted]#g' \
+    -e "s~(^|[^A-Za-z0-9_])$closing_keyword($closing_gap)#([0-9]+)~\1\2\4issue \5~gI" \
+    -e "s~(^|[^A-Za-z0-9_])$closing_keyword($closing_gap)([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)#([0-9]+)~\1\2\4\5 issue \6~gI")"
   if [ "$form" = commit ]; then
     printf '%s.\n' "$n"
     printf '%s\n' "$prompt" | fold -s -w 70 | sed -e 's/ *$//' -e 's/^/> /' -e 's/^> $/>/'
