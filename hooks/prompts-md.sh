@@ -13,6 +13,11 @@
 # The pull request comes from a squash subject ending in (#n), from GitHub's
 # merge commit subject, or, for commits not yet on the default branch, from gh
 # for the current branch. A prompt quoted under an older commit is only named.
+#
+# On a branch other than the remote's default one the file is left as the
+# default branch had it where the two last met, a merge in progress counted,
+# so no two pull requests conflict over it. A branch whose meeting point has no
+# PROMPTS.md yet builds it, which is how a repository gets the file.
 
 set -euo pipefail
 
@@ -48,6 +53,18 @@ default="${default#"$remote"/}"
 has_head=0
 git rev-parse --verify --quiet HEAD >/dev/null && has_head=1
 
+current="$(git branch --show-current)"
+if [ "$has_head" -eq 1 ] && [ -n "$current" ] && [ "$current" != "$default" ]; then
+  heads=(HEAD)
+  git rev-parse --verify --quiet MERGE_HEAD >/dev/null && heads+=(MERGE_HEAD)
+  if meet="$(git merge-base "refs/remotes/$remote/$default" "${heads[@]}" 2>/dev/null)" &&
+    git cat-file -e "$meet:PROMPTS.md" 2>/dev/null; then
+    git restore --source "$meet" --staged --worktree -- PROMPTS.md
+    echo "prompts-md: $current is not $default, so PROMPTS.md stays as $default had it at $(git rev-parse --short "$meet")"
+    exit 0
+  fi
+fi
+
 last=""
 if [ -n "$message" ]; then
   last=pending
@@ -71,7 +88,6 @@ if [ "$has_head" -eq 1 ]; then
 fi
 
 branch_pr=""
-current="$(git branch --show-current)"
 if [ -n "$current" ] && [ "$current" != "$default" ] && command -v gh >/dev/null 2>&1; then
   branch_pr="$(GH_PROMPT_DISABLED=1 gh pr view --json number -q .number 2>/dev/null || true)"
   case "$branch_pr" in "" | *[!0-9]*) branch_pr="" ;; esac
