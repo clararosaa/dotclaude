@@ -12,19 +12,26 @@ redacted in public and upstream repositories.
 ## The body
 
 - Claude's part of the body is, in this order: the one sentence on what has changed, the line
-  that closes issues (`Closes #n`, with any related documents), the two blocks below, then the
-  rest of the repository's pull request template filled in as described further down. Nothing
-  else: no free-form summary or test plan outside that. The sentence and the closing line stand
-  on their own, without a heading, even where the template gives them sections of their own.
-  Without a template the body ends after the blocks and the user writes the description.
+  that closes issues (`Closes #n`, with any related documents), the landing note when there is
+  one, the two blocks below, then the rest of the repository's pull request template filled in
+  as described further down. Nothing else: no free-form summary or test plan outside that. The
+  sentence, the closing line and the landing note stand on their own, without a heading, even
+  where the template gives them sections of their own. Without a template the body ends after
+  the blocks and the user writes the description.
 - The closing line names the parent of a closed issue too when this PR closes the last of its
   sub-issues still open, since GitHub leaves a parent open after its last sub-issue closes. The
   issue's `parent` and that parent's `subIssues` with their states come from `gh api graphql`, and
   the check runs again whenever the closing line is written or the body refreshed, as a sub-issue
   may close elsewhere in the meantime. A parent whose body names work that none of its sub-issues
   covers stays off the line, and the reply says why.
-- The two blocks come straight after the closing line and above the rest of the template. They
-  are a TL;DR for the reviewer.
+- The landing note is there when the landing simulation under Pull requests in
+  `~/.claude/CLAUDE.md` finds an order that conflicts or leaves shared code undone. It is one
+  short paragraph: the other PR by number, what each order leaves (the conflicting files, the
+  part still undone), the order recommended, and the branch that holds the follow-up change
+  for the PR that lands second. It is rewritten whenever the body is refreshed, and dropped
+  once the follow-up change is in the PR that lands second or the other PR has closed.
+- The two blocks come straight after the closing line, or the landing note, and above the rest
+  of the template. They are a TL;DR for the reviewer.
 - First block: a fenced code block holding the URL of the public configuration repository
   described under Public configuration repository in `~/.claude/CLAUDE.md`, pinned to a commit
   as `<repository URL>/tree/<full hash>`, so teammates can read and copy the rules the PR was

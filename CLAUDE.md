@@ -202,6 +202,19 @@ apply to one repository belong in that repository's project memory.
   the user can pass it on. A task chip is for work no live session holds. A session that
   switches a shared checkout for anything but the PR in play switches it back before the turn
   ends.
+- A change that has to reach code another open PR adds, moves or rewrites, such as an entry in
+  a menu the other PR creates, is never left to whichever of the two lands second. Before a PR
+  opens, and in every review of one, list the open PRs that touch any of its files, fetch each
+  head from `refs/pull/<n>/head`, and simulate the landing of this PR and each of them in both
+  orders, the way the repository lands PRs: `git merge-tree --write-tree` of the first head
+  onto the base branch's remote-tracking ref, `git commit-tree` of that tree with the ref as
+  its parent, and the head as a second one where the repository keeps merge commits, then
+  `git merge-tree --write-tree` of the second head onto that commit. Read the shared code in
+  each result tree, not only the exit status. When an order conflicts or leaves the shared part
+  undone, the PR body says so in the landing note the skill places and names the order it
+  recommends, and the follow-up change waits on a pushed branch of its own for the PR that
+  lands second, built on the two combined, with the repository's verify command and end to
+  end run passing there. A review reports such an order as a finding.
 
 ## Prose
 
