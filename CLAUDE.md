@@ -322,6 +322,19 @@ apply to one repository belong in that repository's project memory.
 - A proposal the user turns down is not built, not raised again and not folded into other work
   later in the session. Only the user brings it back.
 
+## Testing a change
+
+- Code that loads the current address again to apply a change, such as a setting only the first
+  layout reads, builds the address from the path and the query, `location.pathname +
+  location.search` in a browser, never from the whole `location.href`: a navigation to the same
+  address with a `#` part only scrolls to the fragment and loads nothing. Test it on an address
+  with a `#` part too.
+- Test a feature from each way users reach the page it runs on: the navigation, a typed or
+  bookmarked address, a link from another page, and a link that opens a `#section` of it.
+- A check at phone size covers the phone turned sideways too, width and height swapped, such as
+  844 x 390 for a 390 x 844 phone, as an end to end test beside the upright one. The PR body
+  names anything that stays as it is on desktop at the sideways size.
+
 ## Comments
 
 - Match the comment density of the file being edited and the files beside it. Look before writing
